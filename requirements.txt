@@ -1,0 +1,14 @@
+# Core
+requests>=2.31.0
+PyAudio>=0.2.14
+SpeechRecognition>=3.10.0
+audioop-lts>=0.2.0
+
+# AI Models
+supertonic>=0.1.0
+onnxruntime>=1.14.0
+
+# Graphics & UI
+pygame>=2.5.0
+numpy>=1.24.0
+opencv-python>=4.8.0
