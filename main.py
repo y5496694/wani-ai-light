@@ -12,7 +12,7 @@ import signal
 import io
 from pathlib import Path
 
-from config import CHARACTER_NAME, WAKE_WORD, VISION_PROMPT
+from config import CHARACTER_NAME, WAKE_WORDS, VISION_PROMPT
 from modules.audio import AudioManager
 from modules.stt import STTEngine
 from modules.llm import LLMEngine
@@ -79,9 +79,12 @@ class WaniLight:
 
                 logger.info(f"인식됨: '{user_text}'")
 
-                # 3. 호출어 체크 ("와니야" 포함 여부)
-                if WAKE_WORD in user_text:
-                    logger.info(f"🔔 호출어 '{WAKE_WORD}' 감지! 사진 분석을 시작합니다.")
+                # 3. 호출어 체크 (정규화 및 다중 호출어 지원)
+                clean_raw = user_text.replace(" ", "").replace(".", "").replace("?", "").replace("!", "").strip()
+                wake_detected = any(word.replace(" ", "") in clean_raw for word in WAKE_WORDS)
+
+                if wake_detected:
+                    logger.info(f"🔔 호출어 감지! (인식문구: '{user_text}') 사진 분석을 시작합니다.")
                     
                     # 알림음 재생
                     ping_file = Path(__file__).parent / "assets" / "ping.wav"
