@@ -44,7 +44,27 @@ class TTSEngine:
                 raise FileNotFoundError(
                     f"Supertonic 에셋을 찾을 수 없습니다: {SUPERTONIC_ASSETS_DIR}\n"
                     "scripts/setup.sh를 먼저 실행해주세요."
-...
+                )
+
+            # 엔진 초기화 (model_dir 지정)
+            self._engine = TTS(model_dir=str(SUPERTONIC_ASSETS_DIR))
+            
+            # 목소리 스타일 설정 (F2) - 전용 로더(loader) 사용
+            style_path = SUPERTONIC_ASSETS_DIR / "voice_styles" / f"{SUPERTONIC_VOICE_STYLE}.json"
+            if not style_path.exists():
+                style_path = SUPERTONIC_ASSETS_DIR / f"{SUPERTONIC_VOICE_STYLE}.json"
+            
+            # loader.load_voice_style_from_json_file를 사용하여 Style 객체 생성
+            self._style = loader.load_voice_style_from_json_file(str(style_path))
+            
+            self._initialized = True
+            elapsed = time.time() - start
+            logger.info(f"Supertonic 엔진 로드 완료 ({elapsed:.1f}초)")
+
+        except ImportError:
+            logger.error("supertonic 패키지가 설치되지 않았습니다. pip install supertonic")
+            raise
+        except Exception as e:
             logger.error(f"Supertonic 초기화 실패: {e}")
             raise
 
