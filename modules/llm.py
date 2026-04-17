@@ -239,7 +239,7 @@ class LLMEngine:
                 return "슬픔", f"API 오류가 발생했어 (코드: {response.status_code})"
 
             data = response.json()
-            full_text = data.get("message", {}).get("content", "")
+            full_text = data.get("response", "")
             emotion, clean_text = self._parse_emotion(full_text)
             
             return emotion, clean_text
