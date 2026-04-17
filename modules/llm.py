@@ -239,13 +239,30 @@ class LLMEngine:
                 return "슬픔", f"API 오류가 발생했어 (코드: {response.status_code})"
 
             data = response.json()
-            full_text = data.get("response") or data.get("message", {}).get("content") or ""
+            english_description = data.get("response") or data.get("message", {}).get("content") or ""
             
-            if not full_text:
+            if not english_description:
                 logger.warning(f"Ollama 응답이 비어있습니다. 원본 데이터: {data}")
+                return "슬픔", "사진을 분석하는 중에 문제가 생겼어."
+
+            logger.info(f"Moondream 영문 분석 결과: {english_description}")
+
+            # 2단계: 대화형 LLM(Gemma 4)을 사용하여 한국어 및 캐릭터 톤으로 번역
+            translation_prompt = (
+                f"Translate and rephrase the following image description into polite, kind, and friendly Korean. "
+                f"You are acting as an AI assistant named 'Wani'. "
+                f"Description: {english_description}\n"
+                f"Format: [Emotion] Korean description."
+            )
             
-            emotion, clean_text = self._parse_emotion(full_text)
-            return emotion, clean_text
+            # chat 메서드를 재사용하여 번역 및 감정 파싱 수행
+            emotion, korean_description = self.chat(f"[System: Translate the image description] {translation_prompt}")
+            
+            # 대화 기록에서 위 시스템 메시지 제거 (기록 오염 방지)
+            if self.conversation_history and "[System:" in self.conversation_history[-1]["content"]:
+                self.conversation_history.pop()
+
+            return emotion, korean_description
 
         except Exception as e:
             logger.error(f"이미지 분석 실패: {e}")
