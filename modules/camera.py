@@ -50,6 +50,14 @@ class CameraManager:
                 logger.error("프레임을 캡처할 수 없습니다.")
                 return None
 
+            # 이미지 리사이징 (분석 속도 향상을 위해 최대 512px로 축소)
+            max_size = 512
+            h, w = frame.shape[:2]
+            if max(h, w) > max_size:
+                scale = max_size / max(h, w)
+                new_w, new_h = int(w * scale), int(h * scale)
+                frame = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
             # 이미지 저장
             cv2.imwrite(output_path, frame)
             logger.info(f"📸 사진 촬영 완료: {output_path}")

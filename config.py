@@ -32,7 +32,8 @@ BACKGROUND_COLOR = (30, 30, 40)  # 어두운 남색 배경
 # LLM 설정 (Gemma4 E2B via Ollama)
 # ──────────────────────────────────────────────
 OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL = "gemma4:e2b"
+OLLAMA_MODEL = "gemma4:e2b"     # 일반 대화용 모델
+VISION_MODEL = "moondream"      # 사진 분석용 경량 모델 (속도 향상)
 LLM_CONTEXT_LENGTH = 2048  # RAM 절약을 위해 2048 권장 (최대 4096)
 LLM_TEMPERATURE = 0.7
 LLM_MAX_HISTORY = 20  # 대화 기록 최대 유지 수 (메모리 관리)

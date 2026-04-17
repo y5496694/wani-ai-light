@@ -12,7 +12,7 @@ from typing import Generator
 import sys
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent.parent))
 from config import (
-    OLLAMA_HOST, OLLAMA_MODEL, LLM_CONTEXT_LENGTH,
+    OLLAMA_HOST, OLLAMA_MODEL, VISION_MODEL, LLM_CONTEXT_LENGTH,
     LLM_TEMPERATURE, LLM_MAX_HISTORY, SYSTEM_PROMPT
 )
 
@@ -224,11 +224,10 @@ class LLMEngine:
             with open(image_path, "rb") as f:
                 img_data = base64.b64encode(f.read()).decode()
 
-            response = requests.post(self.api_url, json={
-                "model": self.model,
-                "messages": [
-                    {"role": "user", "content": prompt, "images": [img_data]}
-                ],
+            response = requests.post(self.api_url.replace("/chat", "/generate"), json={
+                "model": VISION_MODEL,
+                "prompt": prompt,
+                "images": [img_data],
                 "stream": False,
                 "options": {
                     "num_ctx": LLM_CONTEXT_LENGTH,
