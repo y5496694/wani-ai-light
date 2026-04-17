@@ -94,7 +94,7 @@ class LLMEngine:
                     "num_ctx": LLM_CONTEXT_LENGTH,
                     "temperature": LLM_TEMPERATURE,
                 }
-            }, timeout=60)
+            }, timeout=180)
 
             if response.status_code != 200:
                 logger.error(f"Ollama API 오류: {response.status_code}")
@@ -152,7 +152,7 @@ class LLMEngine:
                     "num_ctx": LLM_CONTEXT_LENGTH,
                     "temperature": LLM_TEMPERATURE,
                 }
-            }, stream=True, timeout=120)
+            }, stream=True, timeout=180)
 
             full_text = ""
             emotion_parsed = False
