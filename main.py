@@ -63,7 +63,7 @@ class WaniLight:
 
     def run(self):
         """메인 루프: 항상 듣기 -> 호출어 감지 -> 사진 촬영 -> 분석"""
-        logger.info(f"🎧 '{WAKE_WORD}' 호출을 기다리는 중...")
+        logger.info(f"🎧 '{WAKE_WORDS[0]}' 호출을 기다리는 중...")
 
         while not self._shutdown:
             try:
