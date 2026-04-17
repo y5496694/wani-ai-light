@@ -239,9 +239,12 @@ class LLMEngine:
                 return "슬픔", f"API 오류가 발생했어 (코드: {response.status_code})"
 
             data = response.json()
-            full_text = data.get("response", "")
-            emotion, clean_text = self._parse_emotion(full_text)
+            full_text = data.get("response") or data.get("message", {}).get("content") or ""
             
+            if not full_text:
+                logger.warning(f"Ollama 응답이 비어있습니다. 원본 데이터: {data}")
+            
+            emotion, clean_text = self._parse_emotion(full_text)
             return emotion, clean_text
 
         except Exception as e:
