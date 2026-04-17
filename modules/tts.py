@@ -102,7 +102,7 @@ class TTSEngine:
             # 합성 수행
             audio = self._engine.synthesize(
                 text, 
-                style=self._style,
+                voice_style=self._style,
                 speed=TTS_SPEED
             )
 

@@ -234,7 +234,7 @@ class LLMEngine:
                     "num_ctx": LLM_CONTEXT_LENGTH,
                     "temperature": LLM_TEMPERATURE,
                 }
-            }, timeout=120)
+            }, timeout=300)
 
             if response.status_code != 200:
                 return "슬픔", f"API 오류가 발생했어 (코드: {response.status_code})"
